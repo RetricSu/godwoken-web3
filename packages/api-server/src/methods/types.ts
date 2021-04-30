@@ -15,7 +15,7 @@ export type Response = number | string | boolean | SyningStatus | Array<string>;
 
 export type Callback = (err: Error, res?: any | Response) => void;
 
-export type BlockParameter = string | 'latest' | 'earliest' | 'pending';
+export type BlockParameter = HexNumber | 'latest' | 'earliest' | 'pending';
 
 export interface TransactionCallObject {
   from?: HexString;
@@ -25,6 +25,7 @@ export interface TransactionCallObject {
   value?: HexNumber;
   data?: HexNumber;
 }
+
 export interface LogItem {
   account_id: HexNumber;
   service_flag: HexNumber;

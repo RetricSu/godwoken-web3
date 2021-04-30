@@ -1,5 +1,6 @@
 import { INVALID_PARAMS } from './error-code';
 import { validateHexNumber, validateHexString } from '../util';
+import { BlockParameter } from './types';
 
 function defaultLogger(level: string, ...messages: any[]) {
   console.log(`[${level}] `, ...messages);
@@ -73,8 +74,8 @@ export const validators = {
    * @param index
    * @returns
    */
-  hexNumberOrTag(params: any[], index: number): any {
-    return verifyHexNumberOrTag(params[index], index);
+  blockParameter(params: any[], index: number): any {
+    return verifyBlockParameter(params[index], index);
   },
 
   /**
@@ -211,7 +212,7 @@ export const validators = {
 
     // validate `fromBlock`
     if (fromBlock !== undefined && fromBlock !== null) {
-      const fromBlockErr = verifyHexNumberOrTag(fromBlock, index);
+      const fromBlockErr = verifyBlockParameter(fromBlock, index);
       if (fromBlockErr !== undefined) {
         return fromBlockErr;
       }
@@ -219,7 +220,7 @@ export const validators = {
 
     // validate `toBlock`
     if (toBlock !== undefined && toBlock !== null) {
-      const toBlockErr = verifyHexNumberOrTag(toBlock, index);
+      const toBlockErr = verifyBlockParameter(toBlock, index);
       if (toBlockErr !== undefined) {
         return toBlockErr;
       }
@@ -280,20 +281,16 @@ function verifyHexNumber(hexNumber: string, index: number) {
   return undefined;
 }
 
-function verifyHexNumberOrTag(hexNumber: any, index: number): any {
-  // TODO: only support "latest" now
-  if (hexNumber === 'latest') {
+function verifyBlockParameter(hexNumber: BlockParameter, index: number): any {
+  // TODO: only support "latest" | "earliest" now
+  if (hexNumber === 'latest' || hexNumber === 'earliest') {
     return undefined;
   }
 
-  if (
-    typeof hexNumber !== 'string' ||
-    hexNumber === 'earliest' ||
-    hexNumber === 'pending'
-  ) {
+  if (typeof hexNumber !== 'string' || hexNumber === 'pending') {
     return invalidParamsError(
       index,
-      `argument must be a hex string or "latest"`
+      `argument must be a hex number or "latest","earliest", and "pending" is not supported yet.`
     );
   }
 

@@ -75,6 +75,7 @@ import { DataCacheConstructor, RedisDataCache } from "../../cache/data";
 import { gwConfig } from "../../base/index";
 import { logger } from "../../base/logger";
 import { calcIntrinsicGas } from "../../util";
+import { prof } from "../decorator";
 
 const Config = require("../../../config/eth.json");
 
@@ -339,12 +340,31 @@ export class Eth {
     return [];
   }
 
+  @prof(25000)
+  async prof(args: []): Promise<any> {
+    return "ok";
+  }
+
   async blockNumber(args: []): Promise<HexNumber | null> {
+    // const tipBlockNumber = await this.query.getTipBlockNumber();
+    // if (tipBlockNumber == null) {
+    //   return null;
+    // }
+    // const blockHeight: HexNumber = new Uint64(tipBlockNumber).toHex();
+    // return blockHeight;
+
+    // use cache
+    const key = "blockNumber";
+    const cacheBkNum = await this.cacheStore.get(key);
+    if (cacheBkNum != null) {
+      return cacheBkNum;
+    }
     const tipBlockNumber = await this.query.getTipBlockNumber();
     if (tipBlockNumber == null) {
       return null;
     }
     const blockHeight: HexNumber = new Uint64(tipBlockNumber).toHex();
+    this.cacheStore.insert(key, blockHeight);
     return blockHeight;
   }
 

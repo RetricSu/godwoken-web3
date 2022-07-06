@@ -19,7 +19,7 @@ export function prof(timeMs?: number) {
         await asyncSleep(timeMs);
       }
       const profile = Profiler.stopProfiling();
-      const cpuprofile = path.join(`cpuprofile-${Date.now()}.log`);
+      const cpuprofile = path.join(`${Date.now()}.cpuprofile`);
       profile
         .export()
         .pipe(fs.createWriteStream(cpuprofile))

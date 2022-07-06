@@ -346,26 +346,26 @@ export class Eth {
   }
 
   async blockNumber(args: []): Promise<HexNumber | null> {
-    // const tipBlockNumber = await this.query.getTipBlockNumber();
-    // if (tipBlockNumber == null) {
-    //   return null;
-    // }
-    // const blockHeight: HexNumber = new Uint64(tipBlockNumber).toHex();
-    // return blockHeight;
-
-    // use cache
-    const key = "blockNumber";
-    const cacheBkNum = await this.cacheStore.get(key);
-    if (cacheBkNum != null) {
-      return cacheBkNum;
-    }
     const tipBlockNumber = await this.query.getTipBlockNumber();
     if (tipBlockNumber == null) {
       return null;
     }
     const blockHeight: HexNumber = new Uint64(tipBlockNumber).toHex();
-    this.cacheStore.insert(key, blockHeight);
     return blockHeight;
+
+    // use cache
+    // const key = "blockNumber";
+    // const cacheBkNum = await this.cacheStore.get(key);
+    // if (cacheBkNum != null) {
+    //   return cacheBkNum;
+    // }
+    // const tipBlockNumber = await this.query.getTipBlockNumber();
+    // if (tipBlockNumber == null) {
+    //   return null;
+    // }
+    // const blockHeight: HexNumber = new Uint64(tipBlockNumber).toHex();
+    // this.cacheStore.insert(key, blockHeight);
+    // return blockHeight;
   }
 
   async sign(_args: any[]): Promise<void> {
